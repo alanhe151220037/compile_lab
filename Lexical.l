@@ -1,6 +1,6 @@
 %{
 #include "gram_tree.h"
-#define YYSTYPE Nod
+#define YYSTYPE Nod*
 #include "syntax.tab.h"
 #include <stdlib.h>
 #include <string.h>
@@ -14,15 +14,21 @@
 	}while(0);
 */
 void setlval(int token_code){
-	yylval.if_lex=1;
-	yylval.if_null=0;
-	yylval.id = token_code;
-	yylval.first_line = yylineno;
-	if(token_code==1||token_code==7||token_code==8||token_code==9){
-		yylval.str = (char *)malloc(1+strlen(yytext));
-		strcpy(yylval.str,yytext);
+	yylval=(Nod*)malloc(sizeof(Nod));
+	yylval->token_id = token_code;
+	yylval->first_line = yylineno;
+	yylval->parent=yylval->son=yylval->next=NULL;
+	switch(token_code){
+		case 1:
+		case 7:
+		case 8:
+		case 9:
+			yylval->prop=(void *)malloc(1+strlen(yytext));
+			strcpy((char*)(yylval->prop),yytext);
+			break;
+		default:
+			yylval->prop=NULL;
 	}
-	else	yylval.str=NULL;
 }
 extern int success;
 %}

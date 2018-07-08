@@ -1,21 +1,15 @@
 #ifndef GRAM_TREE
 #define GRAM_TREE
 typedef struct Node{
-	int if_lex;
-	int if_null;
-	struct Node *self;
-
-	int id;
+	int token_id,pattern_id;
 	int first_line;
-	char *str;
+	void *prop;
 
-	struct Node *son,*next;
+	struct Node *parent,*son,*next;
 }Nod;
 
-Nod *root;
-void insert(Nod *a,Nod *b);
-Nod *copy_nod(Nod *a);
-Nod *trans_nod(Nod *a);
+Nod* root;
+Nod* create_gnod(int,int);
 void insert_1(Nod *a,Nod *b);
 void insert_2(Nod *a,Nod *b1,Nod *b2);
 void insert_3(Nod *a,Nod *b1,Nod *b2,Nod *b3);
