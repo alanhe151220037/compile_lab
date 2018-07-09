@@ -39,7 +39,7 @@ prop_fun *create_fun(prop_ID *id_,prop_var *var_){
 	new->id=id_;
 	new->type=NULL;
 	prop_var *var__=copy_varlist(var_);
-	new->paramlist=var_;
+	new->paramlist=var__;
 	new->next=NULL;
 	return new;
 }
@@ -652,7 +652,7 @@ void analy_tree(Nod *nod){
 			}
 			break;
 		case 51:
-			switch(nod->token_id){
+			switch(nod->pattern_id){
 				case 1:
 					if(nod->son->prop!=NULL){
 						add_exp2exp((prop_exp*)nod->son->prop,(prop_exp*)nod->son->next->next->prop);
