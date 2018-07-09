@@ -365,8 +365,8 @@ void analy_tree(Nod *nod){
 					if(add_sym((prop_var *)(nod->son->next->prop))==0)find_error(3,nod->first_line);
 				break;
 				case 3:	
-					set_type1fun((prop_fun *)(nod->son->next->prop),(prop_type *)(nod->son->prop));	
-					if(add_fun((prop_fun *)(nod->son->next->prop))==0)find_error(4,nod->first_line);
+//					set_type1fun((prop_fun *)(nod->son->next->prop),(prop_type *)(nod->son->prop));	
+//					if(add_fun((prop_fun *)(nod->son->next->prop))==0)find_error(4,nod->first_line);
 				break;
 					
 			}
@@ -427,11 +427,16 @@ void analy_tree(Nod *nod){
 				case 1:
 					nod->prop=create_fun((prop_ID *)(nod->son->prop),(prop_var *)(nod->son->next->next->prop));
 					entre_field(0);
+					set_type1fun((prop_fun *)(nod->prop),(prop_type *)(nod->parent->son->prop));	
+					if(add_fun((prop_fun *)(nod->prop))==0)find_error(4,nod->first_line);
 					if(add_sym((prop_var *)(nod->son->next->next->prop))==0)find_error(3,nod->first_line);
 					break;
 				case 2:
 					nod->prop=create_fun((prop_ID *)(nod->son->prop),NULL);
 					entre_field(0);
+					set_type1fun((prop_fun *)(nod->prop),(prop_type *)(nod->parent->son->prop));	
+					if(add_fun((prop_fun *)(nod->prop))==0)find_error(4,nod->first_line);
+				
 					break;
 			}
 			break;
