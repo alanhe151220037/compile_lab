@@ -448,7 +448,9 @@ void analy_tree(Nod *nod){
 				case 2:
 					nod->prop=create_fun((prop_ID *)(nod->son->prop),NULL);
 					entre_field(0);
-					((prop_fun *)(nod->prop))->f=current_field;
+					((prop_fun *)(nod->prop))->f=current_field;					set_type1fun((prop_fun *)(nod->prop),(prop_type *)(nod->parent->son->prop));	
+					if(add_fun((prop_fun *)(nod->prop))==0)find_error(4,nod->first_line);
+
 					break;
 			}
 			break;
