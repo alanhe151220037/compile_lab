@@ -191,7 +191,6 @@ sentence *translate_args(Nod *nod,field_tree *f,operand *list){
 	return NULL;
 }
 sentence *translate_cond(Nod *nod,operand *label_t,operand *label_f,field_tree *f){
-printf("%d %d in \n",nod->token_id,nod->pattern_id);
 	operand *p1;
 	operand *p2;
 	sentence *s;
@@ -238,7 +237,6 @@ operand *lookup(field_tree *f,char *id_){
 	}
 }
 sentence *translate_exp(Nod *nod,field_tree *f,operand *place){
-printf("%d %d\n",nod->token_id,nod->pattern_id);
 	if(place==NULL)place=create_operand(2,NULL,0);
 	operand *p1;
 	operand *p2;
@@ -335,7 +333,6 @@ printf("%d %d\n",nod->token_id,nod->pattern_id);
 
 
 sentence *translate(Nod *nod,field_tree *f){	
-printf("%d %d\n",nod->token_id,nod->pattern_id);
 	sentence *p;
 	operand *q1;
 	operand *q2;
