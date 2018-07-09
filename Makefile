@@ -29,6 +29,7 @@ test2: parser
 	./parser  ./testcase/test_set_2/test_2_18.c
 	./parser  ./testcase/test_set_2/test_2_19.c
 test3: parser
-	./parser test.c out1.ir
+	./parser test1.c out1.ir
+	./parser test2.c out2.ir
 clean:
 	rm parser lex.yy.c syntax.tab.h syntax.tab.c 

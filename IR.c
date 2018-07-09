@@ -86,7 +86,7 @@ void print_sentence(sentence *s){
 				fprintf(fp,"%s := %s - %s\n",s->arg0->str,s->arg1->str,s->arg2->str);
 				break;
 			case 6:
-				fprintf(fp,"%s := %s + %s\n",s->arg0->str,s->arg1->str,s->arg2->str);
+				fprintf(fp,"%s := %s * %s\n",s->arg0->str,s->arg1->str,s->arg2->str);
 				break;
 			case 7:
 				fprintf(fp,"%s := %s / %s\n",s->arg0->str,s->arg1->str,s->arg2->str);
@@ -147,12 +147,12 @@ void print_sentence(sentence *s){
 	}
 }
 int get_relop(char *str){
-	if(strcmp(str,">"))return 12;
-	else if(strcmp(str,"<"))return 13;
-	else if(strcmp(str,">="))return 14;
-	else if(strcmp(str,"<="))return 15;
-	else if(strcmp(str,"=="))return 16;
-	else if(strcmp(str,"!="))return 17;
+	if(strcmp(str,">")==0)return 12;
+	else if(strcmp(str,"<")==0)return 13;
+	else if(strcmp(str,">=")==0)return 14;
+	else if(strcmp(str,"<=")==0)return 15;
+	else if(strcmp(str,"==")==0)return 16;
+	else if(strcmp(str,"!=")==0)return 17;
 }
 sentence *translate_param(prop_fun *fun_){
 	field_tree *f_=fun_->f;
@@ -191,6 +191,7 @@ sentence *translate_args(Nod *nod,field_tree *f,operand *list){
 	return NULL;
 }
 sentence *translate_cond(Nod *nod,operand *label_t,operand *label_f,field_tree *f){
+printf("%d %d in \n",nod->token_id,nod->pattern_id);
 	operand *p1;
 	operand *p2;
 	sentence *s;
@@ -237,6 +238,7 @@ operand *lookup(field_tree *f,char *id_){
 	}
 }
 sentence *translate_exp(Nod *nod,field_tree *f,operand *place){
+printf("%d %d\n",nod->token_id,nod->pattern_id);
 	if(place==NULL)place=create_operand(2,NULL,0);
 	operand *p1;
 	operand *p2;
@@ -244,7 +246,8 @@ sentence *translate_exp(Nod *nod,field_tree *f,operand *place){
 	sentence *s;
 	switch(nod->pattern_id){
 		case 16:
-			return create_sen(3,place,create_operand(1,NULL,atoi(nod->son->prop)),NULL);
+			p1=create_operand(1,NULL,*(int *)(nod->son->prop));
+			return create_sen(3,place,p1,NULL);
 		case 15:
 			return create_sen(3,place,lookup(f,nod->son->prop),NULL);
 		case 1:
@@ -288,7 +291,7 @@ sentence *translate_exp(Nod *nod,field_tree *f,operand *place){
 			connect_sen(s,create_sen(7,place,p1,p2));
 			return s;
 		case 8:
-			return translate_exp(nod->son,f,place);
+			return translate_exp(nod->son->next,f,place);
 		case 9:
 			p1=create_operand(2,NULL,0);
 			s=translate_exp(nod->son->next,f,p1);
@@ -332,6 +335,7 @@ sentence *translate_exp(Nod *nod,field_tree *f,operand *place){
 
 
 sentence *translate(Nod *nod,field_tree *f){	
+printf("%d %d\n",nod->token_id,nod->pattern_id);
 	sentence *p;
 	operand *q1;
 	operand *q2;
@@ -425,7 +429,12 @@ sentence *translate(Nod *nod,field_tree *f){
 				}
 			}
 			else if(nod->pattern_id==2){
-				return connect_sen(translate(nod->son,f),translate(nod->son->next->next,f));
+				if(((prop_var *)(nod->son->prop))->arrylist==NULL)p=NULL;
+				else{
+					((prop_var *)(nod->son->prop))->op=create_operand(2,NULL,0);
+					p=create_sen(19,((prop_var *)(nod->son->prop))->op,create_operand(1,NULL,((prop_var *)(nod->son->prop))->arrylist->nr*4),NULL);
+				}
+				return connect_sen(p,translate(nod->son->next->next,f));
 			}
 		
 	}
