@@ -17,6 +17,7 @@ prop_var *create_var(prop_ID *id_){
 	new->type=NULL;
 	new->init=NULL;
 	new->arrylist=NULL;
+	new->op=NULL;
 	//new->belongto=NULL;
 	new->next=NULL;
 	return new;
@@ -31,6 +32,7 @@ prop_var *create_var(prop_ID *id_){
 		new->arrylist=var_->arrylist;
 	//	new->belongto=var_->belongto;
 		new->next=copy_varlist(var_->next);
+		new->op=NULL;
 		return new;
 	}
 
@@ -39,7 +41,7 @@ prop_fun *create_fun(prop_ID *id_,prop_var *var_){
 	new->id=id_;
 	new->type=NULL;
 	prop_var *var__=copy_varlist(var_);
-	new->paramlist=var_;
+	new->paramlist=var__;
 	new->next=NULL;
 	return new;
 }
@@ -198,7 +200,9 @@ int check_struct(prop_exp* exp_){
 }
 int check_param(prop_var *var_,prop_exp *exp_){
 	while(var_!=NULL&&exp_!=NULL){
-		if(var_->type!=exp_->type||var_->arrylist!=exp_->arrylist)break;
+		if(var_->type!=exp_->type||var_->arrylist!=exp_->arrylist){
+			break;
+		}
 		var_=var_->next;
 		exp_=exp_->next;	
 	}
@@ -325,6 +329,15 @@ void analy_tree(Nod *nod){
 		current_field=&root_field;
 		add_type("int");
 		add_type("float");
+		prop_var *v=create_var("arg");
+		set_type1var(v,root_field.type_t);
+		prop_fun *fun_=create_fun("read",NULL);
+		set_type1fun(fun_,root_field.type_t);
+		add_fun(fun_);
+		fun_=create_fun("write",v);
+		set_type1fun(fun_,root_field.type_t);
+		add_fun(fun_);
+
 	}
 	
 
@@ -427,11 +440,13 @@ void analy_tree(Nod *nod){
 				case 1:
 					nod->prop=create_fun((prop_ID *)(nod->son->prop),(prop_var *)(nod->son->next->next->prop));
 					entre_field(0);
+					((prop_fun *)(nod->prop))->f=current_field;
 					if(add_sym((prop_var *)(nod->son->next->next->prop))==0)find_error(3,nod->first_line);
 					break;
 				case 2:
 					nod->prop=create_fun((prop_ID *)(nod->son->prop),NULL);
 					entre_field(0);
+					((prop_fun *)(nod->prop))->f=current_field;
 					break;
 			}
 			break;
@@ -652,7 +667,7 @@ void analy_tree(Nod *nod){
 			}
 			break;
 		case 51:
-			switch(nod->token_id){
+			switch(nod->pattern_id){
 				case 1:
 					if(nod->son->prop!=NULL){
 						add_exp2exp((prop_exp*)nod->son->prop,(prop_exp*)nod->son->next->next->prop);

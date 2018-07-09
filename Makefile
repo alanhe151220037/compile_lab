@@ -1,7 +1,7 @@
 parser:
 	bison -d syntax.y
 	flex Lexical.l
-	gcc gram_tree.c sym_tab.c syntax.tab.c main.c -lfl -ly -o parser
+	gcc gram_tree.c sym_tab.c IR.c syntax.tab.c main.c -lfl -ly -o parser
 .PHONY: run clean
 test1: parser
 	./parser  ./testcase/test_set_1/test_1_1.c
@@ -28,5 +28,7 @@ test2: parser
 	./parser  ./testcase/test_set_2/test_2_17.c
 	./parser  ./testcase/test_set_2/test_2_18.c
 	./parser  ./testcase/test_set_2/test_2_19.c
+test3: parser
+	./parser test.c out1.ir
 clean:
 	rm parser lex.yy.c syntax.tab.h syntax.tab.c 

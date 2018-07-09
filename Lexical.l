@@ -23,6 +23,7 @@ void setlval(int token_code){
 		case 7:
 		case 8:
 		case 9:
+		case 13:
 			yylval->prop=(void *)malloc(1+strlen(yytext));
 			strcpy((char*)(yylval->prop),yytext);
 			break;

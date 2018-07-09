@@ -18,7 +18,7 @@ typedef struct prop_var_{
 
 	arry *arrylist; 
 //	void *belongto;
-
+	void *op;
 	struct prop_var_ *next;
 }prop_var;
 
@@ -36,14 +36,6 @@ typedef struct prop_exp_{
 	struct prop_exp_ *next;
 	
 }prop_exp;
-typedef struct prop_fun_{
-	prop_ID *id;
-	prop_type *type;
-	prop_var *paramlist;
-	struct prop_fun_ *next;	
-}prop_fun;
-
-
 //struct prop_exp
 typedef struct field_tree_{
 	int if_struct;
@@ -54,6 +46,17 @@ typedef struct field_tree_{
 	struct field_tree_ *child;
 }field_tree;
 field_tree root_field;
+
+
+typedef struct prop_fun_{
+	prop_ID *id;
+	prop_type *type;
+	prop_var *paramlist;
+	struct prop_fun_ *next;
+	field_tree *f;	
+}prop_fun;
+
+
 
 void analy_tree(Nod*);
 void print_symt(field_tree *,int);

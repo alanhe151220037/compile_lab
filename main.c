@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "lex.yy.c"
 #include "sym_tab.h"
+#include "IR.h"
 extern int success;
 int main(int argc, char **argv){
 	if(argc<=1){	
@@ -22,6 +23,9 @@ int main(int argc, char **argv){
 //		printf("//////////////\n");
 //		print_funlist();
 //		print_symt(&root_field,0);
+		fp = fopen(argv[2],"w");
+		print_sentence(translate(root,NULL));
+		fclose(fp);
 	}
 		
 	return 0;
